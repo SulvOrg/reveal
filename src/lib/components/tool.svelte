@@ -11,6 +11,7 @@
   export let state = "Unknown";
   export let champSelect: ChampSelect | null = null;
   export let connected = false;
+  export let queuePaused = false;
   export let onConfigChange: (config: Config) => void = () => {};
 
   async function handleConfigChange(nextConfig: Config) {
@@ -33,7 +34,7 @@
   }
 </script>
 
-<div class="flex h-full min-h-0 flex-col gap-3">
+<div class="flex h-full min-h-0 flex-col gap-2">
   <SettingsPanel {config} onChange={handleConfigChange} />
 
   {#if state === "ChampSelect"}
@@ -100,6 +101,8 @@
               Game in progress
             {:else if !connected}
               Looking for League
+            {:else if queuePaused}
+              Queue paused after a dodge
             {:else}
               Ready for Champ Select
             {/if}
@@ -109,6 +112,8 @@
               Reveal is standing by and will be ready for your next lobby.
             {:else if !connected}
               Start League, or restart it and run Reveal as administrator if it is already open.
+            {:else if queuePaused}
+              Reveal stopped the next search. Queue again in League when you're ready.
             {:else}
               Join a lobby and queue normally. Teammate names will appear here automatically.
             {/if}

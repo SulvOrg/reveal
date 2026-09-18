@@ -1,3 +1,4 @@
+use crate::queue_pause::QueuePauseState;
 use shaco::rest::LCUClientInfo;
 use tokio::sync::Mutex;
 
@@ -28,5 +29,13 @@ pub struct DodgeState {
 impl Default for Dodge {
     fn default() -> Self {
         Self(Mutex::new(DodgeState::default()))
+    }
+}
+
+pub struct QueuePause(pub Mutex<QueuePauseState>);
+
+impl Default for QueuePause {
+    fn default() -> Self {
+        Self(Mutex::new(QueuePauseState::default()))
     }
 }

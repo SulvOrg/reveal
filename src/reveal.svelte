@@ -24,6 +24,7 @@
 
   let state = "Unknown";
   let connected = false;
+  let queuePaused = false;
   let champSelect: ChampSelect | null = null;
   let config: Config | null = null;
   let updateStatus: UpdateStatus = "Checking";
@@ -96,6 +97,11 @@
           }),
         );
         listeners.push(
+          await listen<boolean>("queue_pause_update", ({ payload }) => {
+            queuePaused = payload;
+          }),
+        );
+        listeners.push(
           await listen<ChampSelect>("champ_select_started", ({ payload }) => {
             champSelect = payload;
             activeLobbyId ??= createLobbyHistoryId();
@@ -146,7 +152,7 @@
     historyCount={history.length}
     onNavigate={navigate}
   />
-  <div class="min-h-0 flex-1 px-5 py-4">
+  <div class="min-h-0 flex-1 px-5 py-3">
     {#if updateStatus === "UpToDate"}
       {#if activePage === "history"}
         <HistoryPanel
@@ -160,6 +166,7 @@
           {state}
           {champSelect}
           {connected}
+          {queuePaused}
           onConfigChange={setConfig}
         />
       {/if}

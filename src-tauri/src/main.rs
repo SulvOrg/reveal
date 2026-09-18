@@ -11,12 +11,13 @@ mod commands;
 mod config;
 mod lcu;
 mod lobby;
+mod queue_pause;
 mod region;
 mod state;
 mod summoner;
 mod utils;
 
-use app_state::{Dodge, Lcu};
+use app_state::{Dodge, Lcu, QueuePause};
 use commands::{
     app_ready, dodge, enable_dodge, get_config, get_lcu_info, get_lcu_state, open_opgg_link,
     set_config, write_frontend_log,
@@ -33,6 +34,7 @@ fn main() {
     let result = tauri::Builder::default()
         .manage(Lcu::default())
         .manage(Dodge::default())
+        .manage(QueuePause::default())
         .setup(|app| {
             let app_handle = app.handle();
             log_info!(

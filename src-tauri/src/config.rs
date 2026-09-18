@@ -13,6 +13,8 @@ pub struct Config {
     pub auto_open_delay_seconds: u32,
     pub auto_accept: bool,
     pub accept_delay: u32,
+    #[serde(default)]
+    pub pause_queue_after_dodge: bool,
     #[serde(default = "default_provider")]
     pub multi_provider: String,
 }
@@ -24,6 +26,7 @@ impl Default for Config {
             auto_open_delay_seconds: DEFAULT_AUTO_OPEN_DELAY_SECONDS,
             auto_accept: false,
             accept_delay: 2_000,
+            pause_queue_after_dodge: false,
             multi_provider: default_provider(),
         }
     }
@@ -103,5 +106,6 @@ mod tests {
             config.auto_open_delay_seconds,
             DEFAULT_AUTO_OPEN_DELAY_SECONDS
         );
+        assert!(!config.pause_queue_after_dodge);
     }
 }

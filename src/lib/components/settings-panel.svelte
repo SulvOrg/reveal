@@ -60,7 +60,7 @@
 
   <div class="reveal-panel divide-y divide-white/10 overflow-hidden p-1">
     <div
-      class="flex items-center gap-3 rounded-lg px-3 py-2 transition hover:bg-white/[0.025]"
+      class="flex items-center gap-3 rounded-lg px-3 py-1.5 transition hover:bg-white/[0.025]"
     >
       <Label for="auto-open" class="min-w-0 flex-1 cursor-pointer">
         <span class="block text-xs font-medium">Open lookup automatically</span>
@@ -104,7 +104,7 @@
       </div>
     </div>
     <div
-      class="flex items-center gap-3 rounded-lg px-3 py-2 transition hover:bg-white/[0.025]"
+      class="flex items-center gap-3 rounded-lg px-3 py-1.5 transition hover:bg-white/[0.025]"
     >
       <Label for="auto-accept" class="min-w-0 flex-1 cursor-pointer">
         <span class="block text-xs font-medium">Accept matches automatically</span>
@@ -117,6 +117,22 @@
         disabled={!config}
         id="auto-accept"
         onCheckedChange={(autoAccept) => updateConfig({ autoAccept })}
+      />
+    </div>
+    <div
+      class="flex items-center gap-3 rounded-lg px-3 py-1.5 transition hover:bg-white/[0.025]"
+    >
+      <Label for="pause-after-dodge" class="min-w-0 flex-1 cursor-pointer">
+        <span class="block text-xs font-medium">Pause queue after a dodge</span>
+        <span class="mt-0.5 block text-[10px] text-muted-foreground">
+          Return to lobby until you queue again
+        </span>
+      </Label>
+      <Switch
+        checked={config?.pauseQueueAfterDodge ?? false}
+        disabled={!config}
+        id="pause-after-dodge"
+        onCheckedChange={(pauseQueueAfterDodge) => updateConfig({ pauseQueueAfterDodge })}
       />
     </div>
   </div>

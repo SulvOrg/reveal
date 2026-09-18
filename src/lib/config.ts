@@ -18,6 +18,7 @@ export interface Config {
     autoOpenDelaySeconds: number;
     autoAccept: boolean;
     acceptDelay: number;
+    pauseQueueAfterDodge: boolean;
     multiProvider: MultiProvider;
 }
 
@@ -26,6 +27,7 @@ export const DEFAULT_CONFIG: Config = {
     autoOpenDelaySeconds: 6,
     autoAccept: false,
     acceptDelay: 2_000,
+    pauseQueueAfterDodge: false,
     multiProvider: "opgg",
 };
 

@@ -1,5 +1,5 @@
 use crate::{
-    app_state::{Dodge, Lcu},
+    app_state::{Dodge, Lcu, QueuePause},
     champ_select::ChampSelectSession,
     config::{self, AppConfig, Config},
     lobby::get_lobby_info,
@@ -33,6 +33,12 @@ pub async fn app_ready(
 
     app_handle
         .emit_all("lcu_state_update", lcu.connected)
+        .map_err(|error| error.to_string())?;
+
+    let pause = app_handle.state::<QueuePause>();
+    let paused = pause.0.lock().await.paused();
+    app_handle
+        .emit_all("queue_pause_update", paused)
         .map_err(|error| error.to_string())?;
 
     Ok(cfg.clone())
@@ -69,6 +75,18 @@ pub async fn set_config(
         .await
         .map_err(|error| error.to_string())?;
     *stored_config = new_cfg;
+    let pause_enabled = stored_config.pause_queue_after_dodge;
+    drop(stored_config);
+
+    if !pause_enabled {
+        let pause = app_handle.state::<QueuePause>();
+        let pause_changed = pause.0.lock().await.disable();
+        if let Some(paused) = pause_changed {
+            app_handle
+                .emit_all("queue_pause_update", paused)
+                .map_err(|error| error.to_string())?;
+        }
+    }
 
     Ok(())
 }

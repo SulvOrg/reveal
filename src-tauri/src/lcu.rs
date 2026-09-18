@@ -1,4 +1,4 @@
-use crate::app_state::{Dodge, Lcu};
+use crate::app_state::{Dodge, Lcu, QueuePause};
 use crate::champ_select::ChampSelectSession;
 use crate::state;
 use futures_util::StreamExt;
@@ -138,6 +138,16 @@ async fn set_connection_state(
     lcu.connected = connected;
     lcu.data = data;
     drop(lcu);
+
+    if !connected {
+        let pause = app_handle.state::<QueuePause>();
+        let pause_changed = pause.0.lock().await.reset();
+        if let Some(paused) = pause_changed {
+            if let Err(error) = app_handle.emit_all("queue_pause_update", paused) {
+                log_error!("Failed to emit queue pause state: {error}");
+            }
+        }
+    }
 
     if let Err(error) = app_handle.emit_all("lcu_state_update", connected) {
         log_error!("Failed to emit League connection state: {error}");

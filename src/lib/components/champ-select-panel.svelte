@@ -16,7 +16,7 @@
   }
 </script>
 
-<section class="flex min-h-0 flex-1 flex-col gap-3">
+<section class="flex min-h-0 flex-1 flex-col gap-2">
   <div class="flex items-center justify-between">
     <div>
       <div class="text-sm font-semibold">Champ Select</div>
@@ -37,7 +37,7 @@
         <div
           class:col-span-2={champSelect.participants.length % 2 === 1 &&
             index === champSelect.participants.length - 1}
-          class="reveal-panel flex h-11 min-w-0 items-center gap-2.5 px-3"
+          class="reveal-panel flex h-10 min-w-0 items-center gap-2.5 px-3"
         >
           <div
             class="grid h-6 min-w-7 shrink-0 place-items-center rounded-md bg-blue-500/10 px-1 text-[9px] font-semibold text-blue-300"
@@ -67,7 +67,7 @@
       {#each Array.from({ length: 5 }) as _, index (index)}
         <div
           class:col-span-2={index === 4}
-          class="reveal-panel flex h-11 animate-pulse items-center gap-2.5 px-3"
+          class="reveal-panel flex h-10 animate-pulse items-center gap-2.5 px-3"
         >
           <div class="h-6 w-6 rounded-md bg-white/5" />
           <div class="h-2.5 w-28 rounded-full bg-white/5" />
@@ -77,7 +77,7 @@
   </div>
 
   <Button
-    class="mt-auto h-10 w-full bg-blue-500 text-sm shadow-[0_8px_24px_rgba(59,130,246,0.18)] hover:bg-blue-400"
+    class="mt-auto h-9 w-full bg-blue-500 text-sm shadow-[0_8px_24px_rgba(59,130,246,0.18)] hover:bg-blue-400"
     disabled={!champSelect}
     on:click={openMultiLink}
   >
