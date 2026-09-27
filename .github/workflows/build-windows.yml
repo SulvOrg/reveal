@@ -40,15 +40,27 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # Runs `beforeBuildCommand` (pnpm build -> dist/) then `cargo build --release`
-      # and bundles MSI + NSIS (+ updater artifacts, unsigned unless
-      # TAURI_PRIVATE_KEY / TAURI_KEY_PASSWORD secrets are configured).
-      # Host runner is already x86_64-pc-windows-msvc, so no --target flag:
-      # output stays in src-tauri/target/release/bundle/.
-      - name: Build Tauri app (release)
+      # and bundles the installers. The host runner is already
+      # x86_64-pc-windows-msvc, so no --target flag: output stays in
+      # src-tauri/target/release/bundle/.
+      #
+      # Updater signing needs the TAURI_PRIVATE_KEY secret (secrets do not
+      # transfer to forks). An unset secret expands to an empty string, which
+      # Tauri v1 tries to parse as a key and fails with
+      # "incorrect updater private key password: Missing comment in secret key".
+      # So the key env vars are only exported when the secret exists; otherwise
+      # we build just MSI + NSIS. With no Updater bundles produced, Tauri
+      # skips the signing step entirely instead of failing.
+      - name: Build Tauri app (release, signed updater)
+        if: ${{ secrets.TAURI_PRIVATE_KEY != '' }}
         run: pnpm tauri build
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+
+      - name: Build Tauri app (release, installers only)
+        if: ${{ secrets.TAURI_PRIVATE_KEY == '' }}
+        run: pnpm tauri build --bundles msi nsis
 
       - name: List bundles
         run: Get-ChildItem -Recurse src-tauri/target/release/bundle
