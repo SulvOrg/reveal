@@ -1,7 +1,6 @@
 <script lang="ts">
   import { updateConfig, type Config } from "$lib/config";
   import { fade } from "svelte/transition";
-  import RevealCount from "./reveal-count.svelte";
   import type { ChampSelect } from "$lib/champ_select";
   import ChampSelectPanel from "./champ-select-panel.svelte";
   import SettingsPanel from "./settings-panel.svelte";
@@ -42,31 +41,19 @@
       <ChampSelectPanel {champSelect} />
     </div>
   {:else}
-    <div class="grid grid-cols-2 gap-3">
-      <div class="reveal-panel px-3.5 py-3">
-        <div
-          class="text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground"
-        >
-          Client state
-        </div>
-        <div class="mt-1.5 flex items-center gap-2 text-sm font-semibold">
-          <span
-            class="h-1.5 w-1.5 rounded-full"
-            class:bg-blue-400={connected}
-            class:bg-amber-400={!connected}
-          />
-          {formatState(state)}
-        </div>
+    <div class="reveal-panel px-3.5 py-3">
+      <div
+        class="text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground"
+      >
+        Client state
       </div>
-      <div class="reveal-panel px-3.5 py-3">
-        <div
-          class="text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground"
-        >
-          Revealed lobbies
-        </div>
-        <div class="mt-1.5 text-sm font-semibold tabular-nums">
-          <RevealCount />
-        </div>
+      <div class="mt-1.5 flex items-center gap-2 text-sm font-semibold">
+        <span
+          class="h-1.5 w-1.5 rounded-full"
+          class:bg-blue-400={connected}
+          class:bg-amber-400={!connected}
+        />
+        {formatState(state)}
       </div>
     </div>
 

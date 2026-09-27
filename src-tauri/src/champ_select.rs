@@ -1,5 +1,5 @@
 use crate::{
-    analytics, config::Config, lobby, region::RegionInfo, summoner, utils::display_champ_select,
+    config::Config, lobby, region::RegionInfo, utils::display_champ_select,
 };
 use serde::Deserialize;
 use shaco::rest::RESTClient;
@@ -169,18 +169,10 @@ pub async fn handle_champ_select_start(
             auto_opened = true;
         }
 
-        // Only send analytics once we have all 5 teammates
+        // Stop polling once we have all 5 teammates
         if participant_count >= EXPECTED_PARTICIPANT_COUNT
             && mapped_participant_count >= participant_count
         {
-            match summoner::get_current_summoner(remoting_client).await {
-                Ok(summoner) => {
-                    analytics::send_analytics_event(&team, &summoner, &region_info).await;
-                }
-                Err(error) => {
-                    log_warn!("Failed to read current summoner for analytics: {error}");
-                }
-            }
             log_info!("Complete Champ Select team found; participant polling finished");
             break;
         }

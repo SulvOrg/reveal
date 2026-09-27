@@ -4,7 +4,6 @@
 #[macro_use]
 mod logging;
 
-mod analytics;
 mod app_state;
 mod champ_select;
 mod commands;
@@ -14,7 +13,6 @@ mod lobby;
 mod queue_pause;
 mod region;
 mod state;
-mod summoner;
 mod utils;
 
 use app_state::{Dodge, Lcu, QueuePause};

@@ -42,11 +42,6 @@
       "clipboard": {
         "all": false,
         "writeText": true
-      },
-      "http": {
-        "all": false,
-        "request": true,
-        "scope": ["https://*"]
       }
     },
     "bundle": {
