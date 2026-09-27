@@ -10,6 +10,10 @@ jobs:
   build-windows-x64:
     name: Build Reveal for Windows x64
     runs-on: windows-latest
+    # `secrets` is not an allowed context in `if:` expressions, so evaluate
+    # it once here (`env` IS allowed in `if:`) and gate the build steps on it.
+    env:
+      HAS_TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY != '' }}
 
     steps:
       - name: Checkout repository
@@ -52,14 +56,14 @@ jobs:
       # we build just MSI + NSIS. With no Updater bundles produced, Tauri
       # skips the signing step entirely instead of failing.
       - name: Build Tauri app (release, signed updater)
-        if: ${{ secrets.TAURI_PRIVATE_KEY != '' }}
+        if: env.HAS_TAURI_PRIVATE_KEY == 'true'
         run: pnpm tauri build
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
 
       - name: Build Tauri app (release, installers only)
-        if: ${{ secrets.TAURI_PRIVATE_KEY == '' }}
+        if: env.HAS_TAURI_PRIVATE_KEY != 'true'
         run: pnpm tauri build --bundles msi nsis
 
       - name: List bundles
